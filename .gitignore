@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+server/uploads/original/*
+server/uploads/signed/*
+!server/uploads/original/.gitkeep
+!server/uploads/signed/.gitkeep
