@@ -21,27 +21,31 @@ const port = process.env.PORT || 5000;
 // Helmet security setup
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
-// ✅ Fixed CORS Configuration: Explicit Array with Credentials Support
+// ✅ Fixed CORS Configuration Matrix
 const allowedOrigins = [
-  'http://localhost:5173',                       // Local Development for Frontend
+  'http://localhost:5173',                       // Local Development Frontend
   'https://digital-signature-khaki.vercel.app'  // Live Vercel Production Frontend
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allows requests with no origin (like mobile apps, postman, or server-to-server)
+    // Server-to-server, postman, ya bina origin ki requests ko allow karne ke liye
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) !== -1 || origin === 'null') {
-      callback(null, true);
+      callback(null, true); // ✅ Sahi origin ko allow kiya
     } else {
-      callback(new Error('CORS policy optimization blocked this request.'));
+      // ❌ Custom error throw karne ki jagah 'false' bhejein taaki express crash na ho
+      callback(null, false); 
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// ✅ Handle Preflight (OPTIONS) requests explicitly
+app.options('*', cors());
 
 // Body parsers
 app.use(express.json({ limit: '2mb' }));
