@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+  // 🔽 Yahan par VITE_API_BASE_URL kar diya hai jo Vercel se match karega
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
 });
 
 api.interceptors.request.use((config) => {
